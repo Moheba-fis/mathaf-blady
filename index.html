@@ -217,112 +217,172 @@
   </div>
 </section>
 
-<section class="video-gallery">
-  <div class="cards-container">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>معرض الفيديوهات</title>
+<style>
+  body { font-family: Tahoma, sans-serif; background: #f9f7f1; text-align: center; padding: 20px; }
+  .cards { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+  .card { background: #fff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 250px; overflow: hidden; }
+  .thumb-wrap { display: block; cursor: pointer; }
+  .thumb { width: 100%; height: 150px; object-fit: cover; }
+  .info { padding: 10px; text-align: right; }
+  .title a { text-decoration: none; color: #333; font-weight: bold; display: block; margin-bottom: 5px; }
+  .student { display: flex; align-items: center; gap: 8px; font-size: 0.9em; }
+  .student img { width: 30px; height: 30px; border-radius: 50%; }
+  /* Modal */
+  .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
+  .modal-content { background: #fff; padding: 20px; border-radius: 10px; position: relative; width: 80%; max-width: 800px; }
+  .close { position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer; }
+  iframe { width: 100%; height: 450px; border: none; }
+</style>
+</head>
+<body>
 
-    <!-- الدرعية -->
-    <div class="card">
-      <a class="thumb-wrap" data-video="https://www.youtube.com/embed/_Ij-RO-2l6U" title="الدرعية" target="_blank">
-        <img class="thumb" src="https://i.postimg.cc/qR88py2y/download-3.jpg" alt="الدرعية">
-      </a>
-      <div class="info">
-        <div class="title"><a data-video="https://www.youtube.com/embed/_Ij-RO-2l6U" target="_blank">الدرعية</a></div>
-        <div class="student"><img src="https://i.postimg.cc/2yr5VtyK/5a163202-ecc0-4690-be55-cababd726752.jpg" alt="سعود"><span>تصميم وتنفيذ: سعود غبار</span></div>
-      </div>
+<h1>معرض الفيديوهات</h1>
+<div class="cards">
+
+  <!-- الدرعية -->
+  <div class="card">
+    <a class="thumb-wrap" data-video="https://www.youtube.com/embed/_Ij-RO-2l6U">
+      <img class="thumb" src="https://i.postimg.cc/qR88py2y/download-3.jpg" alt="الدرعية">
+    </a>
+    <div class="info">
+      <div class="title"><a data-video="https://www.youtube.com/embed/_Ij-RO-2l6U">الدرعية</a></div>
+      <div class="student"><img src="https://i.postimg.cc/2yr5VtyK/5a163202-ecc0-4690-be55-cababd726752.jpg" alt="سعود"><span>تصميم وتنفيذ: سعود غبار</span></div>
     </div>
-
-    <!-- العلم السعودي -->
-    <div class="card">
-      <a class="thumb-wrap" data-video="https://www.youtube.com/embed/7XXiLcG8K50" title="العلم السعودي" target="_blank">
-        <img class="thumb" src="https://i.postimg.cc/2jHbSV80/images.jpg" alt="العلم السعودي">
-      </a>
-      <div class="info">
-        <div class="title"><a data-video="https://www.youtube.com/watch?v=1r3Q2Hq0t3E" target="_blank">العلم السعودي</a></div>
-        <div class="student"><img src="https://i.postimg.cc/SKbbSMJ3/351fb76d-89ec-43cb-b840-cd2de81ff551.jpg" alt="باسل"><span>تصميم وتنفيذ: باسل السلمي</span></div>
-      </div>
-    </div>
-
-    <!-- نيوم -->
-    <div class="card">
-      <a class="thumb-wrap" data-video="https://www.youtube.com/embed/tC-h11oxsoE" title="نيوم" target="_blank">
-        <img class="thumb" src="https://i.postimg.cc/7ZXjk21d/download-3.jpg" alt="مشروع نيوم">
-      </a>
-      <div class="info">
-        <div class="title"><a data-video="https://www.youtube.com/watch?v=1INg0bH6q2g" target="_blank">نيوم</a></div>
-        <div class="student"><img src="https://i.postimg.cc/gk3fM0MS/f3bf8ec5-dafd-4047-b50f-98b14c52a15c.jpg" alt="سعد"><span>تصميم وتنفيذ: سعد البقمي</span></div>
-      </div>
-    </div>
-
-    <!-- رؤية 2030 -->
-    <div class="card">
-      <a class="thumb-wrap" data-video="https://www.youtube.com/embed/7C7y9LEMAxk" title="رؤية 2030" target="_blank">
-        <img class="thumb" src="https://i.postimg.cc/9QcQP2MD/download-1.jpg" alt="رؤية 2030">
-      </a>
-      <div class="info">
-        <div class="title"><a data-video="https://www.youtube.com/watch?v=8wT7b0q2k1A" target="_blank">رؤية 2030</a></div>
-        <div class="student"><img src="https://i.postimg.cc/FHsDjFwL/d7da0772-3e9d-498f-aa2a-b2a1540ddaca.jpg" alt="راكان الروقي"><span>تصميم وتنفيذ: راكان الروقي</span></div>
-      </div>
-    </div>
-
-    <!-- التوحيد -->
-    <div class="card">
-      <a class="thumb-wrap" data-video="https://youtu.be/_hBYQH1Mglg" title="التوحيد" target="_blank">
-        <img class="thumb" src="https://i.postimg.cc/Prtg25Wn/download-2.jpg" alt="راية التوحيد">
-      </a>
-      <div class="info">
-        <div class="title"><a data-video="https://www.youtube.com/embed/oF57taMbLpE" target="_blank">التوحيد</a></div>
-        <div class="student"><img src="https://i.postimg.cc/Dw81vStr/Whats-App-Image-2025-09-24-at-10-54-28-AM.jpg" alt="قصي"><span>تصميم وتنفيذ: قصي الغامدي</span></div>
-      </div>
-    </div>
-
-    <!-- توسعة الحرمين -->
-    <div class="card">
-      <a class="thumb-wrap" data-video="https://www.youtube.com/embed/oF57taMbLpE" title="توسعة الحرمين" target="_blank">
-        <img class="thumb" src="https://i.postimg.cc/R0YSv8QS/download-6.jpg" alt="توسعة الحرمين">
-      </a>
-      <div class="info">
-        <div class="title"><a data-video="https://i.postimg.cc/R0YSv8QS/download-6.jpg" target="_blank">توسعة الحرمين</a></div>
-        <div class="student"><img src="https://i.postimg.cc/Xv9GqdxY/084cea44-84ff-4c43-b83e-8ab586d02900.jpg" alt="عمار"><span>تصميم وتنفيذ: عمار الشيخ</span></div>
-      </div>
-    </div>
-
-    <!-- مونديال 2034 -->
-    <div class="card">
-      <a class="thumb-wrap" data-video="https://www.youtube.com/embed/nnltbkvAIO4" title="مونديال 2034" target="_blank">
-        <img class="thumb" src="https://i.postimg.cc/636sZhWh/download-2.jpg" alt="مونديال 2034">
-      </a>
-      <div class="info">
-        <div class="title"><a data-video="https://www.youtube.com/watch?v=3k8QF6s9aM0" target="_blank">مونديال 2034</a></div>
-        <div class="student"><img src="https://i.postimg.cc/BbkwmrFM/bfb0c77a-a130-4ef1-90c1-35c5e98bbe9b.jpg" alt="عبدالله"><span>تصميم وتنفيذ: عبدالله الشهراني</span></div>
-      </div>
-    </div>
-
-  
-
-    <!-- التراث السعودي -->
-    <div class="card">
-      <a class="thumb-wrap" data-video="https://www.youtube.com/embed/DMcSCVDdufc" title="التراث السعودي" target="_blank">
-        <img class="thumb" src="https://i.postimg.cc/9QBJ9HrB/download-1.jpg" alt="التراث السعودي">
-      </a>
-      <div class="info">
-        <div class="title"><a data-video="https://www.youtube.com/watch?v=7p0d2yA4wG8" target="_blank">التراث السعودي</a></div>
-        <div class="student"><img src="https://i.postimg.cc/HW5051Nx/91734591-da6a-47df-ac27-a5125bbcede4.jpg" alt="عمر"><span>تصميم وتنفيذ: عمر الغامدي</span></div>
-      </div>
-    </div>
-
-    <!-- جدة التاريخية -->
-    <div class="card">
-      <a class="thumb-wrap" data-video="https://www.youtube.com/embed/fthtYU-IZQM" title="جدة التاريخية" target="_blank">
-        <img class="thumb" src="https://i.postimg.cc/BnwNpcBB/download-4.jpg" alt="جدة التاريخية">
-      </a>
-      <div class="info">
-        <div class="title"><a data-video="https://www.youtube.com/watch?v=9u7wTg3cJtY" target="_blank">جدة التاريخية</a></div>
-        <div class="student"><img src="." alt="محمد"><span>تصميم وتنفيذ: محمد عماد</span></div>
-      </div>
-    </div>
-
   </div>
-</section>
+
+  <!-- العلم السعودي -->
+  <div class="card">
+    <a class="thumb-wrap" data-video="https://www.youtube.com/embed/7XXiLcG8K50">
+      <img class="thumb" src="https://i.postimg.cc/2jHbSV80/images.jpg" alt="العلم السعودي">
+    </a>
+    <div class="info">
+      <div class="title"><a data-video="https://www.youtube.com/embed/7XXiLcG8K50">العلم السعودي</a></div>
+      <div class="student"><img src="https://i.postimg.cc/SKbbSMJ3/351fb76d-89ec-43cb-b840-cd2de81ff551.jpg" alt="باسل"><span>تصميم وتنفيذ: باسل السلمي</span></div>
+    </div>
+  </div>
+
+  <!-- نيوم -->
+  <div class="card">
+    <a class="thumb-wrap" data-video="https://www.youtube.com/embed/tC-h11oxsoE">
+      <img class="thumb" src="https://i.postimg.cc/7ZXjk21d/download-3.jpg" alt="مشروع نيوم">
+    </a>
+    <div class="info">
+      <div class="title"><a data-video="https://www.youtube.com/embed/tC-h11oxsoE">نيوم</a></div>
+      <div class="student"><img src="https://i.postimg.cc/gk3fM0MS/f3bf8ec5-dafd-4047-b50f-98b14c52a15c.jpg" alt="سعد"><span>تصميم وتنفيذ: سعد البقمي</span></div>
+    </div>
+  </div>
+
+  <!-- رؤية 2030 -->
+  <div class="card">
+    <a class="thumb-wrap" data-video="https://www.youtube.com/embed/7C7y9LEMAxk">
+      <img class="thumb" src="https://i.postimg.cc/9QcQP2MD/download-1.jpg" alt="رؤية 2030">
+    </a>
+    <div class="info">
+      <div class="title"><a data-video="https://www.youtube.com/embed/7C7y9LEMAxk">رؤية 2030</a></div>
+      <div class="student"><img src="https://i.postimg.cc/FHsDjFwL/d7da0772-3e9d-498f-aa2a-b2a1540ddaca.jpg" alt="راكان الروقي"><span>تصميم وتنفيذ: راكان الروقي</span></div>
+    </div>
+  </div>
+
+  <!-- التوحيد -->
+  <div class="card">
+    <a class="thumb-wrap" data-video="https://www.youtube.com/embed/_hBYQH1Mglg">
+      <img class="thumb" src="https://i.postimg.cc/Prtg25Wn/download-2.jpg" alt="راية التوحيد">
+    </a>
+    <div class="info">
+      <div class="title"><a data-video="https://www.youtube.com/embed/_hBYQH1Mglg">التوحيد</a></div>
+      <div class="student"><img src="https://i.postimg.cc/Dw81vStr/Whats-App-Image-2025-09-24-at-10-54-28-AM.jpg" alt="قصي"><span>تصميم وتنفيذ: قصي الغامدي</span></div>
+    </div>
+  </div>
+
+  <!-- توسعة الحرمين -->
+  <div class="card">
+    <a class="thumb-wrap" data-video="https://www.youtube.com/embed/oF57taMbLpE">
+      <img class="thumb" src="https://i.postimg.cc/R0YSv8QS/download-6.jpg" alt="توسعة الحرمين">
+    </a>
+    <div class="info">
+      <div class="title"><a data-video="https://www.youtube.com/embed/oF57taMbLpE">توسعة الحرمين</a></div>
+      <div class="student"><img src="https://i.postimg.cc/Xv9GqdxY/084cea44-84ff-4c43-b83e-8ab586d02900.jpg" alt="عمار"><span>تصميم وتنفيذ: عمار الشيخ</span></div>
+    </div>
+  </div>
+
+  <!-- مونديال 2034 -->
+  <div class="card">
+    <a class="thumb-wrap" data-video="https://www.youtube.com/embed/nnltbkvAIO4">
+      <img class="thumb" src="https://i.postimg.cc/636sZhWh/download-2.jpg" alt="مونديال 2034">
+    </a>
+    <div class="info">
+      <div class="title"><a data-video="https://www.youtube.com/embed/nnltbkvAIO4">مونديال 2034</a></div>
+      <div class="student"><img src="https://i.postimg.cc/BbkwmrFM/bfb0c77a-a130-4ef1-90c1-35c5e98bbe9b.jpg" alt="عبدالله"><span>تصميم وتنفيذ: عبدالله الشهراني</span></div>
+    </div>
+  </div>
+
+  <!-- التراث السعودي -->
+  <div class="card">
+    <a class="thumb-wrap" data-video="https://www.youtube.com/embed/DMcSCVDdufc">
+      <img class="thumb" src="https://i.postimg.cc/9QBJ9HrB/download-1.jpg" alt="التراث السعودي">
+    </a>
+    <div class="info">
+      <div class="title"><a data-video="https://www.youtube.com/embed/DMcSCVDdufc">التراث السعودي</a></div>
+      <div class="student"><img src="https://i.postimg.cc/HW5051Nx/91734591-da6a-47df-ac27-a5125bbcede4.jpg" alt="عمر"><span>تصميم وتنفيذ: عمر الغامدي</span></div>
+    </div>
+  </div>
+
+  <!-- جدة التاريخية -->
+  <div class="card">
+    <a class="thumb-wrap" data-video="https://www.youtube.com/embed/fthtYU-IZQM">
+      <img class="thumb" src="https://i.postimg.cc/BnwNpcBB/download-4.jpg" alt="جدة التاريخية">
+    </a>
+    <div class="info">
+      <div class="title"><a data-video="https://www.youtube.com/embed/fthtYU-IZQM">جدة التاريخية</a></div>
+      <div class="student"><img src="." alt="محمد"><span>تصميم وتنفيذ: محمد عماد</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal للفيديو -->
+<div class="modal" id="videoModal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <iframe id="videoFrame" src="" allowfullscreen></iframe>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('videoModal');
+  const iframe = document.getElementById('videoFrame');
+  const closeBtn = document.querySelector('.close');
+
+  document.querySelectorAll('.thumb-wrap, .title a').forEach(el => {
+    el.addEventListener('click', e => {
+      e.preventDefault();
+      const video = el.getAttribute('data-video');
+      iframe.src = video;
+      modal.style.display = 'flex';
+    });
+  });
+
+  closeBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+    iframe.src = '';
+  });
+
+  window.addEventListener('click', e => {
+    if(e.target === modal){
+      modal.style.display = 'none';
+      iframe.src = '';
+    }
+  });
+</script>
+
+</body>
+</html>
+
 
 <style>
 .video-gallery {
@@ -930,6 +990,7 @@
 </script>
 </body>
 </html>
+
 
 
 
