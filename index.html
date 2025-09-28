@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>متحف بلادي الرقمي — نسخة محدثة</title>
+<style>
+  :root{
+    --green:#006c35;
+    --green-light:#0aa85b;
+    --text:#333;
+    --bg:#f8faf9;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;font-family:Tahoma,system-ui,-apple-system,Segoe UI,Roboto; color:var(--text); background:var(--bg);}
+
+  /* Header */
+  header{
+    background:linear-gradient(90deg,var(--green),var(--green-light));
+    color:#fff; padding:16px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  }
+  .h-col{display:flex; align-items:center; gap:12px}
+  .h-col img.logo{height:68px; border-radius:12px}
+  .h-col .meta{line-height:1.3}
+  .h-col .meta .school{font-size:18px; font-weight:700}
+  .h-col .meta .year{opacity:.9}
+  .center-header{text-align:center; flex:1; min-width:260px; position:relative}
+  /* سارية العلم */
+  .flag-pole{position:relative; height:110px; display:inline-block; vertical-align:middle}
+  .pole{width:6px; background:#f0f0f0; height:110px; border-radius:4px; display:inline-block; margin-inline-start:6px; box-shadow:inset 0 -8px rgba(0,0,0,0.06)}
+  .flag{
+    width:140px; height:90px; display:inline-block; position:absolute; inset-inline-start:12px; top:8px; transform-origin:10% 50%;
+    background-size:cover; background-position:center;
+    border-radius:6px 0 0 6px;
+    /* موجة */
+    animation:wave 1.6s infinite linear;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  }
+  @keyframes wave{
+    0%{transform:translateX(0) skewY(0deg) rotate(0.3deg)}
+    25%{transform:translateX(2px) skewY(-2deg) rotate(-0.3deg)}
+    50%{transform:translateX(0) skewY(0deg) rotate(0.3deg)}
+    75%{transform:translateX(2px) skewY(2deg) rotate(-0.3deg)}
+    100%{transform:translateX(0) skewY(0deg) rotate(0.3deg)}
+  }
+  .center-header h3{margin:.4rem 0 0; font-weight:700}
+  .teacher{display:flex; align-items:center; gap:12px}
+  .teacher img{height:68px; width:68px; object-fit:cover; border-radius:12px; border:2px solid #fff}
+  .teacher .meta{line-height:1.2}
+  .teacher .name{font-weight:700}
+  .teacher .title{opacity:.95}
+
+  /* Page Title */
+  h1{margin:18px 0 6px; color:var(--green); font-size:34px}
+  section{padding:26px 14px; max-width:1200px; margin:0 auto}
+  h2{color:var(--green); margin:0 0 14px}
+
+  /* Intro */
+  .lead{font-size:17px; line-height:1.9}
+
+  /* Quotes */
+  .leaders{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px}
+  .leader{background:#fff; border-radius:16px; padding:16px; box-shadow:0 6px 14px rgba(0,0,0,.06); text-align:center}
+  .leader img{width:180px; height:180px; object-fit:cover; border-radius:16px; border:3px solid var(--green)}
+  .leader h3{margin:10px 0 6px}
+  blockquote{margin:8px auto 0; font-style:italic; background:#f1f5f3; padding:10px 12px; border-radius:12px}
+
+  /* Cards */
+  .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px}
+  .card{background:#fff; border:1px solid #e7e9e8; border-radius:18px; overflow:hidden; box-shadow:0 6px 14px rgba(0,0,0,.05);}
+  .card .thumb-wrap{display:block; position:relative; cursor:pointer; line-height:0}
+  .card img.thumb{width:100%; height:200px; object-fit:cover; display:block; transition:transform .25s ease}
+  .card:hover img.thumb{transform:scale(1.03)}
+  .card .info{padding:10px 12px; text-align:center}
+  .card .title{margin:2px 0 6px; font-weight:700; color:var(--green)}
+  .student{display:flex; align-items:center; justify-content:center; gap:8px; font-size:14px; color:#555}
+  .student img{width:30px; height:30px; border-radius:50%; object-fit:cover; border:2px solid #e2e8e4}
+
+  /* Video Modal */
+  .modal{position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; padding:16px; z-index:9999}
+  .modal.open{display:flex}
+  .modal-inner{width:min(980px,100%); aspect-ratio:16/9; background:#000; border-radius:14px; overflow:hidden; position:relative}
+  .modal iframe{width:100%; height:100%; border:0}
+  .modal .close{position:absolute; top:8px; inset-inline-end:8px; background:#fff; border:0; padding:8px 10px; border-radius:10px; cursor:pointer; font-weight:700}
+
+  /* Gallery (auto-rotating sets) */
+  .gallery .g-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px}
+  .gallery .g-item{background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 6px 14px rgba(0,0,0,.05); position:relative}
+  .gallery .g-rotator{width:100%; height:180px; position:relative; overflow:hidden}
+  .gallery .g-rotator img{width:100%; height:180px; object-fit:cover; display:block; position:absolute; inset:0; transition:opacity .5s ease; opacity:0}
+  .gallery .g-rotator img.show{opacity:1}
+  .gallery .g-item:hover .g-rotator img{transition:none} /* توقف انيميشن ان أردت */
+
+  /* Countdown */
+  .count{font-size:18px; color:var(--green); margin-top:4px}
+
+  /* Form */
+  form{max-width:640px; margin:0 auto; text-align:right}
+  input,textarea,button,select{width:100%; padding:12px; border:1px solid #dfe4e2; border-radius:10px; margin:6px 0; font-size:15px}
+  textarea{min-height:120px; resize:vertical}
+  button{background:var(--green); color:#fff; border:0; cursor:pointer; font-weight:700}
+  button:hover{background:var(--green-light)}
+
+  /* Puzzle / بازل وطني */
+  .puzzle-wrap{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start}
+  .puzzle-pieces, .puzzle-board{background:#fff; border-radius:12px; padding:12px; box-shadow:0 6px 16px rgba(0,0,0,.06)}
+  .pieces {display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
+  .piece{width:120px; height:80px; border-radius:8px; background-size:cover; background-position:center; cursor:grab; border:3px solid #eee}
+  .slot{width:120px; height:80px; margin:6px; display:inline-block; vertical-align:top; border-radius:8px; border:2px dashed #dfe4e2; background:#fafafa}
+  .puzzle-result{margin-top:12px; text-align:center; font-weight:700}
+  .celebrate{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.45); z-index:10000}
+  .celebrate.show{display:flex}
+  .celebrate .card{background:#fff; padding:20px; border-radius:12px; text-align:center; box-shadow:0 12px 30px rgba(0,0,0,.3); transform:translateY(-10px)}
+  .shake{animation:shake .6s}
+  @keyframes shake{ 0%{transform:translateX(0)}25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-6px)}100%{transform:translateX(0)} }
+
+  /* Confetti simple */
+  .confetti-piece{position:fixed; width:10px; height:14px; opacity:0.95; z-index:11000; pointer-events:none; transform-origin:center; animation:confetti-fall linear forwards}
+  @keyframes confetti-fall{ to { transform: translateY(120vh) rotate(720deg); opacity:0 } }
+
+  /* Certificate (شهادة تقدير) */
+  .certificate{max-width:820px; margin:0 auto; background:linear-gradient(180deg,#fff,#f7fff7); padding:28px; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,.12); text-align:center; border:6px solid #fff}
+  .certificate .title{font-size:24px; color:var(--green); font-weight:800; margin-bottom:6px}
+  .certificate .subtitle{font-size:18px; color:#444; margin-bottom:12px}
+  .certificate .body{background:#fff; border-radius:12px; padding:18px; border:2px dashed #e6efe9}
+  .cert-name{font-weight:700; color:var(--green); font-size:20px; margin-top:8px}
+
+  /* Audio floating button */
+  #audioBtn{position:fixed; bottom:16px; inset-inline-end:16px; width:54px; height:54px; border-radius:50%; background:var(--green); color:#fff; border:0; font-size:20px; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 8px 18px rgba(0,0,0,.2); z-index:99999}
+  #audioPrompt{position:fixed; bottom:86px; inset-inline-end:12px; background:#fff; padding:10px 12px; border-radius:10px; box-shadow:0 6px 14px rgba(0,0,0,.12); display:none; z-index:99999}
+  #audioPrompt.show{display:block}
+
+  footer{background:var(--green); color:#fff; text-align:center; padding:14px; margin-top:24px}
+
+  @media (max-width:900px){
+    .puzzle-wrap{grid-template-columns:1fr}
+    .center-header{order:3}
+  }
+  @media (max-width:600px){
+    .h-col .meta .school{font-size:16px}
+    .h-col img.logo,.teacher img{height:56px; width:56px}
+    h1{font-size:28px}
+  }
+</style>
+</head>
+<body>
+
+<!-- النشيد الوطني -->
+<audio id="anthem" loop>
+  <source src="https://www.nationalanthems.info/sa.mp3" type="audio/mpeg" />
+</audio>
+<button id="audioBtn" title="تشغيل/كتم">🔊</button>
+<div id="audioPrompt"></div>
+
+<!-- الهيدر -->
+<header>
+  <div class="h-col">
+    <img class="logo" src="https://i.postimg.cc/t4wRDc8C/logo.webp" alt="شعار المدرسة" />
+    <div class="meta">
+      <div class="school">ثانوية الفيصلية الأهلية بالفلاح</div>
+      <div class="year">العام الدراسي 1447هـ</div>
+    </div>
+  </div>
+
+  <div class="center-header">
+    <!-- سارية العلم مع حركة -->
+    <div class="flag-pole" aria-hidden="true">
+      <div class="pole"></div>
+      <div class="flag" id="flag" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/0/0d/Flag_of_Saudi_Arabia.svg');"></div>
+    </div>
+    <h3>اليوم الوطني السعودي ٩٥</h3>
+  </div>
+
+  <div class="teacher">
+    <img src="https://i.postimg.cc/13nsgH4x/unnamed.jpg" alt="د. مصطفى شحات نافع" />
+    <div class="meta">
+      <div class="name">د. مصطفى شحات نافع</div>
+      <div class="title">معلم اللغة العربية والموهبة</div>
+    </div>
+  </div>
+</header>
+
+
+
+
+<h1>🇸🇦 متحف بلادي الرقمي 🇸🇦</h1>
+
+<section aria-labelledby="count">
+  <h2 id="count"></h2>
+  <div class="count" id="countdown"></div>
+</section>
+
+<section aria-labelledby="intro">
+  <h2 id="intro">مقدمة</h2>
+  <p class="lead">
+    اليوم الوطني السعودي مناسبة عظيمة تجسد وحدة المملكة العربية السعودية.<br>
+    نستذكر فيها جهود المؤسس الملك عبدالعزيز – طيب الله ثراه – في توحيد البلاد.<br>
+    يمثل اليوم الوطني رمزًا للفخر بتاريخ المملكة وإنجازاتها المتتالية.<br>
+    وهو فرصة لتجديد الولاء والانتماء للقيادة الرشيدة والوطن المعطاء.<br>
+    مناسبة تعزز قيم المواطنة وتعكس أصالة المجتمع السعودي وتلاحمه.
+  </p>
+</section>
+
+<section aria-labelledby="leaders">
+  <h2 id="leaders">كلمات القيادة</h2>
+  <div class="leaders">
+    <div class="leader">
+      <img src="https://i.postimg.cc/YCWNd5jd/images-2.jpg" alt="خادم الحرمين الشريفين الملك سلمان بن عبدالعزيز" />
+      <h3>خادم الحرمين الشريفين الملك سلمان بن عبدالعزيز</h3>
+      <blockquote>«هدفي الأول أن تكون بلادنا نموذجًا ناجحًا ورائدًا في العالم على كافة الأصعدة»</blockquote>
+    </div>
+    <div class="leader">
+      <img src="https://i.postimg.cc/wBnVq9Z8/download-1.jpg" alt="سمو ولي العهد الأمير محمد بن سلمان" />
+      <h3>سمو ولي العهد الأمير محمد بن سلمان</h3>
+      <blockquote>«طموحنا أن نبني وطنًا أكثر ازدهارًا ينعم فيه كل مواطن بجودة حياة عالية»</blockquote>
+    </div>
+  </div>
+</section>
+
+<section class="video-gallery">
+  <div class="cards-container">
+
+    <!-- الدرعية -->
+    <div class="card">
+      <a class="thumb-wrap" data-video="https://youtu.be/_Ij-RO-2l6U?si=BCntLLriq7A7b8bD" title="الدرعية" target="_blank">
+        <img class="thumb" src="https://i.postimg.cc/qR88py2y/download-3.jpg" alt="الدرعية">
+      </a>
+      <div class="info">
+        <div class="title"><a data-video="https://www.youtube.com/watch?v=C3n4m1b0g4U" target="_blank">الدرعية</a></div>
+        <div class="student"><img src="https://i.postimg.cc/2yr5VtyK/5a163202-ecc0-4690-be55-cababd726752.jpg" alt="سعود"><span>تصميم وتنفيذ: سعود غبار</span></div>
+      </div>
+    </div>
+
+    <!-- العلم السعودي -->
+    <div class="card">
+      <a class="thumb-wrap" data-video="https://youtu.be/7XXiLcG8K50?si=Nz0lci-_NKhOBxDR" title="العلم السعودي" target="_blank">
+        <img class="thumb" src="https://i.postimg.cc/2jHbSV80/images.jpg" alt="العلم السعودي">
+      </a>
+      <div class="info">
+        <div class="title"><a data-video="https://www.youtube.com/watch?v=1r3Q2Hq0t3E" target="_blank">العلم السعودي</a></div>
+        <div class="student"><img src="https://i.postimg.cc/SKbbSMJ3/351fb76d-89ec-43cb-b840-cd2de81ff551.jpg" alt="باسل"><span>تصميم وتنفيذ: باسل السلمي</span></div>
+      </div>
+    </div>
+
+    <!-- نيوم -->
+    <div class="card">
+      <a class="thumb-wrap" data-video="https://youtu.be/tC-h11oxsoE?si=vH8hQRoLvt80jdFr" title="نيوم" target="_blank">
+        <img class="thumb" src="https://i.postimg.cc/7ZXjk21d/download-3.jpg" alt="مشروع نيوم">
+      </a>
+      <div class="info">
+        <div class="title"><a data-video="https://www.youtube.com/watch?v=1INg0bH6q2g" target="_blank">نيوم</a></div>
+        <div class="student"><img src="https://i.postimg.cc/gk3fM0MS/f3bf8ec5-dafd-4047-b50f-98b14c52a15c.jpg" alt="سعد"><span>تصميم وتنفيذ: سعد البقمي</span></div>
+      </div>
+    </div>
+
+    <!-- رؤية 2030 -->
+    <div class="card">
+      <a class="thumb-wrap" data-video="https://youtu.be/7C7y9LEMAxk?si=YEEA4O8lk9FtXeQh" title="رؤية 2030" target="_blank">
+        <img class="thumb" src="https://i.postimg.cc/9QcQP2MD/download-1.jpg" alt="رؤية 2030">
+      </a>
+      <div class="info">
+        <div class="title"><a data-video="https://www.youtube.com/watch?v=8wT7b0q2k1A" target="_blank">رؤية 2030</a></div>
+        <div class="student"><img src="https://i.postimg.cc/FHsDjFwL/d7da0772-3e9d-498f-aa2a-b2a1540ddaca.jpg" alt="راكان الروقي"><span>تصميم وتنفيذ: راكان الروقي</span></div>
+      </div>
+    </div>
+
+    <!-- التوحيد -->
+    <div class="card">
+      <a class="thumb-wrap" data-video="https://youtu.be/_hBYQH1Mglg" title="التوحيد" target="_blank">
+        <img class="thumb" src="https://i.postimg.cc/Prtg25Wn/download-2.jpg" alt="راية التوحيد">
+      </a>
+      <div class="info">
+        <div class="title"><a data-video="https://youtu.be/oF57taMbLpE?si=Nia31o6nxeCCq3RB" target="_blank">التوحيد</a></div>
+        <div class="student"><img src="https://i.postimg.cc/Dw81vStr/Whats-App-Image-2025-09-24-at-10-54-28-AM.jpg" alt="قصي"><span>تصميم وتنفيذ: قصي الغامدي</span></div>
+      </div>
+    </div>
+
+    <!-- توسعة الحرمين -->
+    <div class="card">
+      <a class="thumb-wrap" data-video="https://youtu.be/XCjQRNYwOvA?si=BEogo3lBrm-mmVQ" title="توسعة الحرمين" target="_blank">
+        <img class="thumb" src="https://i.postimg.cc/R0YSv8QS/download-6.jpg" alt="توسعة الحرمين">
+      </a>
+      <div class="info">
+        <div class="title"><a data-video="https://i.postimg.cc/R0YSv8QS/download-6.jpg" target="_blank">توسعة الحرمين</a></div>
+        <div class="student"><img src="https://i.postimg.cc/Xv9GqdxY/084cea44-84ff-4c43-b83e-8ab586d02900.jpg" alt="عمار"><span>تصميم وتنفيذ: عمار الشيخ</span></div>
+      </div>
+    </div>
+
+    <!-- مونديال 2034 -->
+    <div class="card">
+      <a class="thumb-wrap" data-video="https://youtu.be/nnltbkvAIO4?si=GAUxsH6oTMKudJ00" title="مونديال 2034" target="_blank">
+        <img class="thumb" src="https://i.postimg.cc/636sZhWh/download-2.jpg" alt="مونديال 2034">
+      </a>
+      <div class="info">
+        <div class="title"><a data-video="https://www.youtube.com/watch?v=3k8QF6s9aM0" target="_blank">مونديال 2034</a></div>
+        <div class="student"><img src="https://i.postimg.cc/BbkwmrFM/bfb0c77a-a130-4ef1-90c1-35c5e98bbe9b.jpg" alt="عبدالله"><span>تصميم وتنفيذ: عبدالله الشهراني</span></div>
+      </div>
+    </div>
+
+  
+
+    <!-- التراث السعودي -->
+    <div class="card">
+      <a class="thumb-wrap" data-video="https://youtu.be/DMcSCVDdufc?si=hecaV7wg8n-FzSfp" title="التراث السعودي" target="_blank">
+        <img class="thumb" src="https://i.postimg.cc/9QBJ9HrB/download-1.jpg" alt="التراث السعودي">
+      </a>
+      <div class="info">
+        <div class="title"><a data-video="https://www.youtube.com/watch?v=7p0d2yA4wG8" target="_blank">التراث السعودي</a></div>
+        <div class="student"><img src="https://i.postimg.cc/HW5051Nx/91734591-da6a-47df-ac27-a5125bbcede4.jpg" alt="عمر"><span>تصميم وتنفيذ: عمر الغامدي</span></div>
+      </div>
+    </div>
+
+    <!-- جدة التاريخية -->
+    <div class="card">
+      <a class="thumb-wrap" data-video="https://youtube.com/shorts/fthtYU-IZQM?si=IWgxDmG8SmGf0rWU" title="جدة التاريخية" target="_blank">
+        <img class="thumb" src="https://i.postimg.cc/BnwNpcBB/download-4.jpg" alt="جدة التاريخية">
+      </a>
+      <div class="info">
+        <div class="title"><a data-video="https://www.youtube.com/watch?v=9u7wTg3cJtY" target="_blank">جدة التاريخية</a></div>
+        <div class="student"><img src="." alt="محمد"><span>تصميم وتنفيذ: محمد عماد</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+.video-gallery {
+  padding: 20px;
+  direction: rtl;
+  background: #f5f5f5;
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 أعمدة */
+  gap: 20px; /* المسافة بين البطاقات */
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.thumb {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.info {
+  padding: 10px;
+  text-align: center;
+}
+
+.title {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.title a {
+  text-decoration: none;
+  color: #333;
+}
+
+.student {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.student img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+/* تجاوب مع الشاشات المختلفة */
+@media (max-width: 1200px) {
+  .cards-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .cards-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .cards-container {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+
+<!-- فعاليات مدرسية -->
+<section aria-labelledby="events">
+  <h2 id="events">فعاليات مدرسية: مسابقة اليوم الوطني</h2>
+  <p>اكتب أجمل عبارة عن حب الوطن. سيتم اختيار أفضل الإجابات وتكريم أصحابها بعد المراجعة.</p>
+
+  <!-- نموذج إرسال بالمراجعة: يرسل إلى endpoint خاص (استبدل SUBMIT_ENDPOINT) -->
+  <form id="contestForm">
+    <input type="text" name="student_name" placeholder="اسم الطالب" required>
+    <input type="text" name="class" placeholder="الصف" required>
+    <textarea name="answer" placeholder="اكتب عبارتك هنا..." required></textarea>
+    <button type="submit">إرسال المشاركة</button>
+  </form>
+
+  <div id="submitMsg" style="text-align:center;margin-top:10px;"></div>
+</section>
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>بازل رموز التأسيس</title>
+<style>
+  body {font-family: 'Tahoma', sans-serif; background: #f9f7f1; text-align: center; padding: 20px;}
+  h1 {color: #5a3e1b; margin-bottom: 20px;}
+
+  .pieces, .slots {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+
+  .piece {
+    width: 100px; height: 100px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 2px solid #ccc;
+    border-radius: 12px;
+    cursor: grab;
+  }
+
+  .slot {
+    width: 100px; height: 100px;
+    border: 2px dashed #999;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    position: relative;
+  }
+
+  .slot.correct {
+    border-color: green;
+    background: #e7fbe7;
+  }
+
+  .slot.incorrect {
+    border-color: red;
+    background: #fde7e7;
+  }
+
+  .slot-label {
+    position: absolute;
+    bottom: -25px;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    color: #333;
+  }
+
+  button {
+    background: #5a3e1b;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+
+  button:hover { background: #704e25; }
+</style>
+</head>
+<body>
+
+<h1>🧩 بازل رموز وطنية</h1>
+
+<!-- 🖼️ قطع الصور -->
+<div class="pieces">
+  <div class="piece" draggable="true" data-id="nakhla" style="background-image:url('https://i.postimg.cc/8PMWY8Qq/ajel-2022-02-0d79c66f-7406-411d-8de1-07b05ce914e1-2357dc36-9650-4c52-b514-e5ae088b04ef.png')"></div>
+  <div class="piece" draggable="true" data-id="soug" style="background-image:url('https://i.postimg.cc/P5fxQ0tZ/ajel-2022-02-b5e8ab8c-002b-4dc7-9f97-32f78a333d1b-jkjjjjjjjj.png')"></div>
+  <div class="piece" draggable="true" data-id="rayah" style="background-image:url('https://i.postimg.cc/9XGQ5c0t/ajel-2022-02-3c6208f1-3415-4c0a-b69e-50ce106da1e8-jjjjjjjjjjjjjjjjj.png')"></div>
+  <div class="piece" draggable="true" data-id="saqr" style="background-image:url('https://i.postimg.cc/cL5sMHk8/ajel-2022-02-5f787e8e-dd32-42c3-8d15-d5a4a16ebba0-sssssssss.png')"></div>
+  <div class="piece" draggable="true" data-id="khail" style="background-image:url('https://i.postimg.cc/44bs2wFG/ajel-2022-02-bf853f1f-dc93-4bc5-9b54-f16c851da985-xxxxxx.png')"></div>
+</div>
+
+<!-- 🟦 أماكن وضع الصور -->
+<div class="slots">
+  <div class="slot" data-accept="saqr"><div class="slot-label">الصقر</div></div>
+  <div class="slot" data-accept="khail"><div class="slot-label">الخيل</div></div>
+  <div class="slot" data-accept="rayah"><div class="slot-label">الراية</div></div>
+  <div class="slot" data-accept="soug"><div class="slot-label">السوق</div></div>
+  <div class="slot" data-accept="nakhla"><div class="slot-label">النخلة</div></div>
+</div>
+
+<button id="submitBtn">تسليم</button>
+
+<script>
+  const pieces = document.querySelectorAll('.piece');
+  const slots = document.querySelectorAll('.slot');
+
+  pieces.forEach(piece => {
+    piece.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('id', piece.dataset.id);
+      setTimeout(() => piece.style.opacity = '0.5', 0);
+    });
+    piece.addEventListener('dragend', () => {
+      piece.style.opacity = '1';
+    });
+  });
+
+  slots.forEach(slot => {
+    slot.addEventListener('dragover', e => e.preventDefault());
+    slot.addEventListener('drop', e => {
+      e.preventDefault();
+      const id = e.dataTransfer.getData('id');
+      // إذا كان هناك صورة بالفعل، لا نسمح بإسقاط أخرى
+      if (slot.firstChild.classList && slot.firstChild.classList.contains('piece')) return;
+      const piece = document.querySelector(`.piece[data-id="${id}"]`);
+      slot.appendChild(piece);
+      piece.style.cursor = 'default';
+    });
+  });
+
+  document.getElementById('submitBtn').addEventListener('click', () => {
+    let allCorrect = true;
+    slots.forEach(slot => {
+      const piece = slot.querySelector('.piece');
+      if (piece && piece.dataset.id === slot.dataset.accept) {
+        slot.classList.add('correct');
+        slot.classList.remove('incorrect');
+      } else {
+        slot.classList.add('incorrect');
+        slot.classList.remove('correct');
+        allCorrect = false;
+      }
+    });
+
+    if (allCorrect) {
+      alert('🎉 أحسنت! كل الصور في أماكنها الصحيحة 👏');
+    } else {
+      alert('❌ هناك أخطاء، حاول مرة أخرى.');
+    }
+  });
+</script>
+
+</body>
+
+
+<!-- معرض الصور الفوتوغرافية -->
+<section class="gallery" aria-labelledby="gallery">
+  <h2 id="gallery">معرض الصور الفوتوغرافية</h2>
+  <div class="g-grid" id="galleryGrid">
+    <!-- كل عنصر يحتوي 3 صور تتقلب -->
+    <div class="g-item">
+      <div class="g-rotator" data-interval="2000">
+        <img src="https://i.postimg.cc/x1NZh1Tc/download-9.jpg" alt="الرياض" class="show">
+        <img src="https://i.postimg.cc/ZRHsp9Vm/download-8.jpg" alt="">
+        <img src="https://i.postimg.cc/8PjXfzvF/download-7.jpg" alt="">
+      </div>
+    </div>
+    <div class="g-item">
+      <div class="g-rotator" data-interval="2300">
+        <img src="https://i.postimg.cc/ncy2sYpM/download-12.jpg" alt="جدة" class="show">
+        <img src="https://i.postimg.cc/ZR5xkwFV/download-11.jpg" alt="">
+        <img src="https://i.postimg.cc/WpK6K6DJ/download-10.jpg" alt="">
+      </div>
+    </div>
+    <div class="g-item">
+      <div class="g-rotator" data-interval="2400">
+        <img src="https://i.postimg.cc/h4HZxq13/download-15.jpg" alt="العلا" class="show">
+        <img src="https://i.postimg.cc/5tNs19f0/download-14.jpg" alt="">
+        <img src="https://i.postimg.cc/xCB5KKMv/download-13.jpg" alt="">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- الشكر -->
+<section aria-labelledby="thanks">
+  <h2 id="thanks">شكر وتقدير</h2>
+  <div class="certificate" role="article" aria-label="شهادة تقدير">
+    <div class="title">شهادة تقدير</div>
+    <div class="subtitle">تقديراً للمساهمة المبدعة</div>
+    <div class="body">
+      <div style="font-size:16px">تتقدم إدارة ثانوية الفيصلية الأهلية بفائق الشكر والامتنان إلى</div>
+      <div class="cert-name">طلاب الموهبة — طلابنا المبدعون</div>
+      <p style="margin-top:8px; font-size:15px">
+        شكرًا لطلابنا المبدعين طلاب الموهبة على جهودهم في تصميم هذا المتحف الرقمي، وتنفيذ هذه المبادرة الوطنية الرائعه.
+      </p>
+      <div style="margin-top:12px; display:flex; gap:8px; justify-content:center">
+        <button onclick="window.print()">طباعة الشهادة</button>
+        <button id="downloadCert">حفظ كصورة</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © ثانوية الفيصلية الأهلية بالفلاح — اليوم الوطني السعودي ٩٥
+</footer>
+
+<!-- مشغل الفيديو (داخل الموقع) -->
+<div class="modal" id="videoModal" role="dialog" aria-modal="true" aria-label="مشاهدة الفيديو">
+  <div class="modal-inner">
+    <button class="close" id="closeModal">إغلاق ✕</button>
+    <iframe id="player" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+</div>
+
+<!-- Lightbox للصور -->
+<div class="modal" id="imgLightbox" aria-modal="true" aria-label="عرض الصورة">
+  <div class="modal-inner" style="aspect-ratio:auto; width:min(920px,100%); height:auto;">
+    <button class="close" id="closeImg">إغلاق ✕</button>
+    <img id="lightImg" src="" alt="" style="width:100%; height:auto; display:block;">
+  </div>
+</div>
+
+<!-- احتفال -->
+<div class="celebrate" id="celebrate">
+  <div class="card">
+    <h2 id="celebrateText">ممتاز! الإجابة صحيحة 🎉</h2>
+    <p>تهانينا — لقد أجبت بشكل صحيح.</p>
+    <button onclick="closeCelebrate()">اغلاق</button>
+  </div>
+</div>
+
+<script>
+/* ============================
+   وظائف عامة وصغيرة
+   ============================ */
+
+  // محاولة تشغيل النشيد تلقائياً (قد تمنعه بعض المتصفحات)
+  const anthem = document.getElementById('anthem');
+  const audioBtn = document.getElementById('audioBtn');
+  const audioPrompt = document.getElementById('audioPrompt');
+
+  function updateAudioIcon(){
+    audioBtn.textContent = anthem.muted ? '🔇' : '🔊';
+  }
+
+  audioBtn.addEventListener('click', ()=> {
+    if(anthem.paused){
+      anthem.muted = false;
+      anthem.play().catch(()=>{ /* فشل التشغيل - اترك المستخدم يتفاعل */ });
+    } else {
+      anthem.pause();
+    }
+    updateAudioIcon();
+  });
+
+  // محاولة التشغيل التلقائي عند التحميل
+  window.addEventListener('load', ()=> {
+    // نجرب تشغيل مع كتم أولاً ثم إلغاء الكتم إن أمكن (تكلفة بسيطة)
+    anthem.muted = true;
+    anthem.play().then(()=>{
+      // شغل بنجاح مُكتوم، حاول إلغاء الكتم (قد يُمنع)
+      anthem.muted = false;
+      updateAudioIcon();
+    }).catch((err)=>{
+      // منع التشغيل من المتصفح => نعرض توجيه للمستخدم لاحقاً
+      audioPrompt.classList.add('show');
+      audioPrompt.textContent = 'اضغط زر 🔊 لتشغيل النشيد ';
+      updateAudioIcon();
+    });
+  });
+
+/* ============================
+   العد التنازلي (اليوم الوطني)
+   ============================ */
+  const countdownEl = document.getElementById('countdown');
+  // التاريخ المطلوب: 23 سبتمبر 2025
+  const target = new Date('September 23, 2025 00:00:00 GMT+0300').getTime();
+  setInterval(()=>{
+    const now = Date.now();
+    const d = target - now;
+    if(d <= 0){ countdownEl.textContent = 'كل عام والمملكة بخير 🇸🇦'; return; }
+    const days = Math.floor(d/86400000);
+    const hours = Math.floor((d%86400000)/3600000);
+    const mins = Math.floor((d%3600000)/60000);
+    const secs = Math.floor((d%60000)/1000);
+    countdownEl.textContent = `${days} يوم | ${hours} ساعة | ${mins} دقيقة | ${secs} ثانية`;
+  },1000);
+
+/* ============================
+   مشغل فيديو داخل الموقع (يوتيوب embed)
+   ============================ */
+  const modal = document.getElementById('videoModal');
+  const player = document.getElementById('player');
+  const closeModal = document.getElementById('closeModal');
+
+  document.addEventListener('click', (e)=>{
+    const t = e.target.closest('.thumb-wrap');
+    if(!t) return;
+    const url = t.getAttribute('data-video');
+    if(!url) return;
+    const embed = toEmbed(url);
+    player.src = embed + (embed.includes('?') ? '&' : '?') + 'autoplay=1&rel=0';
+    modal.classList.add('open');
+  });
+  function toEmbed(url){
+    try{
+      const u = new URL(url);
+      if(u.hostname.includes('youtu.be')) return `https://www.youtube.com/embed/${u.pathname.slice(1)}`;
+      if(u.searchParams.get('v')) return `https://www.youtube.com/embed/${u.searchParams.get('v')}`;
+      if(u.pathname.includes('/embed/')) return url;
+      return url;
+    }catch{ return url; }
+  }
+  closeModal.addEventListener('click', ()=>{ player.src=''; modal.classList.remove('open'); });
+  modal.addEventListener('click', (e)=>{ if(e.target === modal) { player.src=''; modal.classList.remove('open'); } });
+
+/* ============================
+   Lightbox الصور
+   ============================ */
+  const imgBox = document.getElementById('imgLightbox');
+  const lightImg = document.getElementById('lightImg');
+  const closeImg = document.getElementById('closeImg');
+  function openLightbox(src){
+    lightImg.src = src;
+    imgBox.classList.add('open');
+  }
+  window.openLightbox = openLightbox;
+  closeImg.addEventListener('click', ()=> imgBox.classList.remove('open'));
+  imgBox.addEventListener('click', (e)=>{ if(e.target === imgBox) imgBox.classList.remove('open'); });
+
+/* ============================
+   معرض الصور — تناوب ثلاثي وتوقف عند hover
+   ============================ */
+  document.querySelectorAll('.g-rotator').forEach(rot=>{
+    const imgs = Array.from(rot.querySelectorAll('img'));
+    let idx = 0;
+    const interval = parseInt(rot.dataset.interval || 2000,10);
+    let timer = null;
+    function show(i){
+      imgs.forEach((im,ii)=> im.classList.toggle('show', ii===i));
+    }
+    function start(){
+      timer = setInterval(()=>{ idx = (idx+1)%imgs.length; show(idx); }, interval);
+    }
+    function stop(){ clearInterval(timer); timer = null; }
+    rot.addEventListener('mouseenter', ()=> stop());
+    rot.addEventListener('mouseleave', ()=> { if(!timer) start(); });
+    show(0); start();
+  });
+
+/* ============================
+   نموذج المسابقة — إرسال إلى endpoint خاص
+   ============================ */
+  const SUBMIT_ENDPOINT = 'REPLACE_WITH_YOUR_ENDPOINT'; // <--- استبدل بالرابط الخاص باستقبال المشاركات
+  const contestForm = document.getElementById('contestForm');
+  const submitMsg = document.getElementById('submitMsg');
+
+  contestForm.addEventListener('submit', async (ev)=>{
+    ev.preventDefault();
+    const formData = new FormData(contestForm);
+    const payload = {
+      student_name: formData.get('student_name'),
+      class: formData.get('class'),
+      answer: formData.get('answer'),
+      submitted_at: new Date().toISOString(),
+      status: 'pending' // المراجعة: ضع هذه القيمة ليتعرف النظام الإداري على حالة "قيد المراجعة"
+    };
+    // تحقق من استبدال endpoint
+    if(SUBMIT_ENDPOINT === 'REPLACE_WITH_YOUR_ENDPOINT'){
+      submitMsg.style.color = 'crimson';
+      submitMsg.textContent = '';
+      return;
+    }
+    try{
+      submitMsg.style.color = '#333';
+      submitMsg.textContent = '...جاري الإرسال';
+      const res = await fetch(SUBMIT_ENDPOINT, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      if(res.ok){
+        submitMsg.style.color = 'green';
+        submitMsg.textContent = 'تم الإرسال — ستعرض المشاركة على الموقع بعد مراجعتها من المشرف.';
+        contestForm.reset();
+      } else {
+        throw new Error('خطأ في الخادم');
+      }
+    }catch(err){
+      submitMsg.style.color = 'crimson';
+      submitMsg.textContent = 'حدث خطأ أثناء الإرسال. تحقق من الرابط أو الاتصال بالمسؤول.';
+    }
+  });
+
+/* ============================
+   بازل وطني — سحب وإفلات بسيط + اختيار متعدد + عرض احتفال
+   ============================ */
+  const piecesContainer = document.getElementById('piecesContainer');
+  const slots = document.querySelectorAll('.slot');
+  let dragged = null;
+
+  // تسهيل السحب
+  document.addEventListener('dragstart', (e)=>{
+    const p = e.target.closest('.piece');
+    if(!p) return;
+    dragged = p;
+    e.dataTransfer.setData('text/plain', p.dataset.id);
+    setTimeout(()=> p.style.opacity = '0.4', 0);
+  });
+  document.addEventListener('dragend', (e)=>{
+    if(dragged) dragged.style.opacity = '1';
+    dragged = null;
+  });
+
+  slots.forEach(slot=>{
+    slot.addEventListener('dragover', (e)=> e.preventDefault());
+    slot.addEventListener('drop', (e)=>{
+      e.preventDefault();
+      const id = e.dataTransfer.getData('text/plain');
+      const piece = document.querySelector(`.piece[data-id="${id}"]`);
+      if(!piece) return;
+      // إذا كان slot فارغ فقط
+      if(slot.children.length === 0){
+        // احضر نسخة ثابتة داخل الـ slot
+        piece.style.cursor = 'default';
+        piece.draggable = false;
+        piece.style.margin = '0';
+        slot.appendChild(piece);
+        checkPuzzleComplete();
+      }
+    });
+  });
+
+  function checkPuzzleComplete(){
+    // نتحقق إن تم وضع كل القطع في الأماكن الصحيحة
+    let correct = true;
+    slots.forEach(s=>{
+      const accept = s.dataset.accept;
+      const child = s.querySelector('.piece');
+      if(!child || child.dataset.id !== accept) correct = false;
+    });
+    if(correct){
+      showCelebrate('لقد نجحت في تجميع البازل!');
+    } else {
+      // لا نفعل شيء
+    }
+  }
+
+  // اختيارات متعددة أسفل البازل
+  document.querySelectorAll('.mc').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const ok = btn.dataset.correct === 'true';
+      if(ok){
+        showCelebrate('إجابة صحيحة! احتفال 🎉');
+      } else {
+        // تأثير خطأ
+        btn.classList.add('shake');
+        setTimeout(()=> btn.classList.remove('shake'), 700);
+      }
+    });
+  });
+
+  // عرض واجهة الاحتفال + confetti
+  const celebrateEl = document.getElementById('celebrate');
+  const celebrateText = document.getElementById('celebrateText');
+  function showCelebrate(text){
+    celebrateText.textContent = text;
+    celebrateEl.classList.add('show');
+    runConfetti();
+  }
+  function closeCelebrate(){
+    celebrateEl.classList.remove('show');
+  }
+
+  // confetti بسيط: توليد قطع متحركة تذهب للأسفل
+  function runConfetti(){
+    const colors = ['#ff4757','#ff6b6b','#ffa502','#2ed573','#1e90ff','#9b59b6'];
+    for(let i=0;i<60;i++){
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.background = colors[Math.floor(Math.random()*colors.length)];
+      el.style.left = Math.random()*100 + 'vw';
+      el.style.top = (-20 - Math.random()*20) + 'vh';
+      el.style.transform = `rotate(${Math.random()*360}deg)`;
+      el.style.width = (6 + Math.random()*10) + 'px';
+      el.style.height = (8 + Math.random()*12) + 'px';
+      el.style.animationDuration = (2 + Math.random()*3) + 's';
+      document.body.appendChild(el);
+      setTimeout(()=> el.remove(), 6000);
+    }
+  }
+
+/* ============================
+   حفظ الشهادة كصورة (مبسطة)
+   ============================ */
+  document.getElementById('downloadCert').addEventListener('click', ()=> {
+    alert('لحفظ الشهادة: استخدم طباعة الصفحة واختر "حفظ كملف PDF" أو استخدم أداة screenshot للحفظ كصورة.');
+  });
+
+/* ============================
+   فتح الفيديو عند الضغط على الصور المصغرة (طبّق على بطاقتك)
+   ============================ */
+  // يمكنك إبقاء كود تشغيل الفيديو المدمج أعلاه (thumb-wrap) كما في ملفك الأصلي
+
+/* ============================
+   نصيحة أخيرة:
+   - استبدل SUBMIT_ENDPOINT برابط استقبال المشاركات (Google Apps Script أو Webhook).
+   - إذا تريد بازل بصور مقطعة بدقة أعلى، أستطيع أعددها لك (أُعطيك صور ومواقع القطع).
+   ============================ */
+
+</script>
+</body>
+</html>
